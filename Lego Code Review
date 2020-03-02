@@ -1,0 +1,182 @@
+ #include <kipr/wombat.h>
+void Drive_Forward(int distance);
+void Drive_Backward(int distance);
+void Turn_Left(int angle);
+void Turn_Right(int angle);
+void Move_Claw_Down (int start, int finish);
+void Move_Claw_Up (int start2, int finish2);
+void Drive_Until_Black_Line(int line);
+void Follow_Line(int distance);
+void Turn_Right_Until_Line(int line);
+void Turn_Left_Until_Line(int line);
+void Open_Claw(int Claw_Openness);
+void Close_Claw(int Claw_Openness);
+int Claw_Up=400;
+int Claw_Down=1050;
+int Claw_Open=300;fs
+int Claw_Close=850;
+int Black=2800;
+int main()
+{
+    enable_servos();
+    Open_Claw(Claw_Open);
+    Move_Claw_Down(Claw_Up,Claw_Down);
+    Drive_Until_Black_Line(1);
+    Turn_Right(5);
+    Close_Claw(Claw_Close);
+    Turn_Left(5);
+    Drive_Backward(10);
+    Move_Claw_Up(Claw_Down,Claw_Up);
+    Turn_Right(90);
+    Drive_Forward(9);
+    Turn_Left(95);
+    Drive_Forward(22);
+    Turn_Left_Until_Line(1);
+    Drive_Forward(30);
+    disable_servos();
+    ao();
+    return 0;
+}
+void Drive_Forward(int distance)
+{
+    cmpc(0);
+    while(gmpc(0)<210*distance)
+    {
+        motor(0,50);
+        motor(2,50);
+        msleep(10);
+    }
+    ao();
+}
+void Drive_Backward(int distance)
+{
+    cmpc(0);
+    while(gmpc(0)>-218.5*distance)
+    {
+        motor(0,-50);
+        motor(2,-50);
+        msleep(10);
+    }
+    ao();
+}
+void Turn_Left (int angle)
+{
+    cmpc(0);
+    while(gmpc(0)<11.6*angle)
+    {
+        motor(0,15);
+        motor(2,-15);
+        msleep(10);
+    }
+    ao();
+    msleep(200);
+}
+void Turn_Right (int angle)
+{
+    cmpc(0);
+    while(gmpc(0)>-11.6*angle)
+    {
+        motor(0,-15);
+        motor(2,15);
+        msleep(10);
+    }
+    ao();
+    msleep(200);
+}
+void Move_Claw_Down (int start, int finish)
+{
+    int position=start;
+    enable_servos();
+    while(position<finish)
+    {
+        set_servo_position(0,position+50);
+        msleep(80);
+        position=position+50;
+    }
+    ao();
+    msleep(100);
+}
+void Move_Claw_Up (int start2,int finish2)
+{
+    int position2=start2;
+    enable_servos();
+    while(position2>finish2)
+    {
+        set_servo_position(0,position2-50);
+        msleep(80);
+        position2=position2-50;
+    }
+    ao();
+    msleep(100);
+}
+void Open_Claw(int Claw_Openness)
+{
+    Claw_Openness=Claw_Open;
+    set_servo_position(2,Claw_Openness);
+    msleep(100);
+}
+void Close_Claw(int Claw_Openness)
+{
+    Claw_Openness=Claw_Close;
+    set_servo_position(2,Claw_Openness);
+    msleep(100);
+}
+void Drive_Until_Black_Line(int_line)
+{
+    while(analog(0)<Black)
+    {
+        motor(0,50);
+        motor(2,50);
+        msleep(50);
+    }
+    ao();
+}
+void Follow_Line(int distance)
+{
+    cmpc(2);
+    while(gmpc(2)<210*distance)
+    {
+        if(analog(0)<Black)
+        {
+            motor(0,50);
+            motor(2,50);
+            msleep(20);
+        }
+        else
+        {
+            motor(0,0);
+            motor(2,50);
+            msleep(20);
+        }
+    }
+    ao();
+}
+void Turn_Right_Until_Line(int line)
+{
+    while (analog(0)<Black)
+    {
+        motor(0,0);
+        motor(2,50);
+        msleep(20);
+    }
+    msleep(100);
+}
+void Turn_Left_Until_Line(int line)
+{
+    while (analog(0)<Black)
+    {
+        motor(0,50);
+        motor(2,0);
+        msleep(20);
+    }
+    msleep(100);
+}
+ 
+    
+    
+    
+    
+    
+    
+    
+    
