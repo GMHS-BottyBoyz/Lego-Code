@@ -13,7 +13,7 @@ void Open_Claw(int Claw_Openness);
 void Close_Claw(int Claw_Openness);
 int Claw_Up=400;
 int Claw_Down=1050;
-int Claw_Open=300;fs
+int Claw_Open=300;
 int Claw_Close=850;
 int Black=2800;
 int main()
